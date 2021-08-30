@@ -1,0 +1,30 @@
+<h1 id="tableLabel">Ticket List</h1>
+
+<p *ngIf="!tickets"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="tickets">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Type</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let ticket of tickets">
+      <td>{{ ticket.createdDate }}</td>
+      <td>{{ ticket.title }}</td>
+      <td>{{ ticket.description }}</td>
+      <td>{{ ticket.type }}</td>
+      <td>{{ ticket.status }}</td>
+      <td>
+        <button type="button" class="btn btn-info">View</button> &nbsp;
+        <button type="button" class="btn btn-secondary">Edit</button> &nbsp;
+        <button (click)="delete(ticket.id)" type="button" class="btn btn-danger">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
