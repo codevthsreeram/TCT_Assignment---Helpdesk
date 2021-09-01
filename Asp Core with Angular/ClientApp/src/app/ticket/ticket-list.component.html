@@ -2,7 +2,64 @@
 
 <p *ngIf="!tickets"><em>Loading...</em></p>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="tickets">
+<!-- Button trigger modal -->
+<div style="text-align: right;margin-bottom:6px;">
+  <button type="button" (click)="addTicket()" class="btn btn-primary" data-bs-toggle="modal"
+          data-bs-target="#mpTicket">
+    Add Ticket
+  </button>
+</div>
+<div class="container-table100">
+  <div class="wrap-table100">
+    <div class="table100 ver1 m-b-110">
+      <div class="table100-head">
+        <table>
+          <thead>
+            <tr class="row100 head">
+              <th class="cell100 column1">Date</th>
+              <th class="cell100 column2">Title</th>
+              <th class="cell100 column3">Description</th>
+              <th class="cell100 column4">Type</th>
+              <th class="cell100 column5">Status</th>
+              <th class="cell100 column6">Action</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+      <div class="table100-body js-pscroll">
+        <table>
+          <tbody>
+            <tr class="row100 body"
+                *ngFor="let ticket of tickets">
+              <td class="cell100 column1">
+                {{ ticket.createdDate | date }}
+              </td>
+              <td class="cell100 column2">
+                {{ ticket.title }}
+              </td>
+              <td class="cell100 column3">
+                {{ ticket.description }}
+              </td>
+              <td class="cell100 column4">
+                {{ ticket.type }}
+              </td>
+              <td class="cell100 column5">
+                {{ ticket.status }}
+              </td>
+              <td class="cell100 column6">
+                <button (click)="viewTicket(ticket)" data-bs-toggle="modal" data-bs-target="#mpTicket" type="button" class="btn btn-info">View</button> &nbsp;
+                <button (click)="editTicket(ticket)" data-bs-toggle="modal" data-bs-target="#mpTicket" type="button" class="btn btn-secondary">Edit</button> &nbsp;
+                <button (click)="deleteTicket(ticket.id)" type="button" class="btn btn-danger">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!--<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="tickets">
   <thead>
     <tr>
       <th>Date</th>
@@ -21,10 +78,75 @@
       <td>{{ ticket.type }}</td>
       <td>{{ ticket.status }}</td>
       <td>
-        <button type="button" class="btn btn-info">View</button> &nbsp;
-        <button type="button" class="btn btn-secondary">Edit</button> &nbsp;
-        <button (click)="delete(ticket.id)" type="button" class="btn btn-danger">Delete</button>
+        <button (click)="viewTicket(ticket)" data-bs-toggle="modal" data-bs-target="#mpTicket" type="button" class="btn btn-info">View</button> &nbsp;
+        <button (click)="editTicket(ticket)"  data-bs-toggle="modal" data-bs-target="#mpTicket" type="button" class="btn btn-secondary">Edit</button> &nbsp;
+        <button (click)="deleteTicket(ticket.id)" type="button" class="btn btn-danger">Delete</button>
       </td>
     </tr>
   </tbody>
-</table>
+</table>-->
+<!-- Modal -->
+<div class="modal fade" id="mpTicket" tabindex="-1" aria-labelledby="ticketModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form [formGroup]="ticketForm" (ngSubmit)="saveTicket()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ticketModalLabel">
+            {{modalTitle}}
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"
+                  aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3" style="text-align: left;">
+            <div *ngIf="alertMessage" class="alert alert-success" role="alert">
+              {{alertMessage}}
+            </div>
+          </div>
+          <div class="mb-3" style="text-align: left;">
+            <label class="form-label" for="txtTitle">
+              Title
+            </label>
+            <input [(ngModel)]="formData.title" formControlName="title" class="form-control"
+                   type="text" placeholder="Enter title" id="txtTitle">
+          </div>
+
+          <div class="mb-3" style="text-align: left;">
+            <label class="form-label" for="txtDescription">
+              Description
+            </label>
+            <textarea [(ngModel)]="formData.description" formControlName="description"
+                      class="form-control" placeholder="Enter description"
+                      id="txtDescription"></textarea>
+          </div>
+          <div class="mb-3" style="text-align: left;">
+            <label class="form-label" for="txtType">
+              Type
+            </label>
+            <input [(ngModel)]="formData.type" type="text" formControlName="type"
+                   class="form-control" placeholder="Enter type" id="txtType">
+          </div>          
+          <div class="mb-3" style="text-align: left;">
+            <label class="form-label" for="txtStatus">
+              Status
+            </label>
+            <input type="text" [(ngModel)]="formData.status" formControlName="status"
+                   class="form-control" placeholder="Enter status"
+                   id="txtStatus">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary"
+                  data-bs-dismiss="modal">
+            Close
+          </button>
+          <button type="submit" *ngIf="mode!='View'" [disabled]="ticketForm.invalid"
+                  class="btn btn-primary">
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
